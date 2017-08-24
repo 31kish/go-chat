@@ -2,9 +2,9 @@ package db
 
 import (
 	"go-chat/app/models"
+	"log"
 
 	"github.com/jinzhu/gorm"
-	"github.com/revel/revel"
 )
 
 // DB --
@@ -15,7 +15,7 @@ func InitDB() {
 	db, err := gorm.Open("sqlite3", "./go-chat.db")
 
 	if err != nil {
-		revel.TRACE.Panicf("faild to connect database %v", err)
+		log.Panicf("faild to connect database %v", err)
 	}
 
 	db.DB()
@@ -23,7 +23,7 @@ func InitDB() {
 
 	autoMigrate()
 
-	revel.TRACE.Println("connected to database")
+	log.Println("connected to database")
 }
 
 func autoMigrate() {
