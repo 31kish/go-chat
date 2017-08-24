@@ -6,11 +6,22 @@
 module:testrunner
 # module:jobs
 
+# Admin
+GET           /admin/signin       Admin.Index
+POST          /admin/signin       Admin.Signin
+GET           /admin/signup       Admin.Signup
+POST          /admin/signup       Admin.Create
+GET           /admin/             Admin.Show
+DELETE        /admin/user/:id     Admin.Delete
 
-GET     /                                       App.Index
+# User
+GET           /signin             App.Index
+GET           /signup             App.Signup
+POST          /signup             App.Create
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
+*       /       404
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/*filepath                       Static.Serve("public")
