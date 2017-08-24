@@ -1,0 +1,43 @@
+{{template "header.html" .}}
+<div class="container">
+  <h3>Administrator</h3>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-default span6">
+        <div class="panel-heading">
+          <h4>Signup</h4>
+        </div>
+        <div class="panel-body">
+          <form action="{{url "Admin.Signup"}}" method="POST" role="form">
+            {{with $field := field "userAdmin.Name" .}}
+              <div class="form-group">
+                  <label for="name">Name</label>
+                  <input id="name" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="User Name">
+                  <span class="error">{{$field.Error}}</span>
+              </div>
+            {{end}}
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input id="email" type="text" class="form-control" required placeholder="Email">
+            </div>
+            <div class="form-group">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" rows="3" required>
+              </div>
+              <div class="form-group">
+                  <label for="password">Confirm</label>
+                  <input type="password" id="password-confirm" class="form-control" rows="3" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <button id="signin-button" type="submit" class="btn btn-primary btn-block">SignUp</button>
+            </div>
+          </form>
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+{{template "footer.html" .}}
