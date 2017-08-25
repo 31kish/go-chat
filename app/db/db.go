@@ -5,12 +5,14 @@ import (
 	"log"
 
 	"github.com/jinzhu/gorm"
+	// sqlite -
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-// DB --
+// DB -
 var DB *gorm.DB
 
-// InitDB --
+// InitDB -
 func InitDB() {
 	db, err := gorm.Open("sqlite3", "./go-chat.db")
 
@@ -27,5 +29,5 @@ func InitDB() {
 }
 
 func autoMigrate() {
-	DB.AutoMigrate(models.UserAdmin{})
+	DB.AutoMigrate(models.UserAdmin{}, models.User{})
 }
