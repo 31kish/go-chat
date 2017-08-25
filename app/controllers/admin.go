@@ -3,47 +3,68 @@ package controllers
 import (
 	"go-chat/app/models"
 	"go-chat/app/routes"
-	"log"
+	"go-chat/app/utils"
 
 	"github.com/revel/revel"
 )
 
-// Admin --
+// Admin -
 type Admin struct {
 	*revel.Controller
 }
 
-// Index -- signin page
-func (c Admin) Index() revel.Result {
+func (c Admin) before() revel.Result {
 	c.ViewArgs["title"] = "Go Chat"
+	return c.Result
+}
+
+func init() {
+	revel.InterceptMethod(Admin.before, revel.BEFORE)
+}
+
+// Index - signin page
+func (c Admin) Index() revel.Result {
 	return c.Render()
 }
 
-// Signin -- signin
+// Signin - signin action
 func (c Admin) Signin() revel.Result {
-	return c.Redirect(c.Show())
+	return c.Redirect(routes.Admin.Show())
 }
 
-// Signup -- signup
+// Signup - signup page
 func (c Admin) Signup() revel.Result {
 	return c.Render()
 }
 
-// Create -- create user admin
-func (c Admin) Create(userAdmin models.UserAdmin, confirmPassword string) revel.Result {
-	log.Printf("%s", userAdmin.Name)
-	log.Printf("%v", c.Params.Form)
-	c.FlashParams()
+// Create - signup action
+func (c Admin) Create(userAdmin models.UserAdmin, verifyPassword string) revel.Result {
+	userAdmin.HashedPassword, _ = utils.EncryptPassword(userAdmin.Password)
 
-	return c.Redirect(routes.Admin.Signup())
+	userAdmin.Validate(c.Validation)
+
+	if c.Validation.HasErrors() {
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect(routes.Admin.Signup())
+	}
+
+	// insert
+
+	// session
+	return c.Redirect(routes.Admin.Index())
 }
 
-// Show --
+// Show - admin top page
 func (c Admin) Show() revel.Result {
+	if _, contains := c.Session["user_admin"]; !contains {
+		return c.Redirect(routes.Admin.Index())
+	}
+
 	return c.Render()
 }
 
-// Delete --
+// Delete - user delete action
 func (c Admin) Delete(id int) revel.Result {
 	return c.Render()
 }

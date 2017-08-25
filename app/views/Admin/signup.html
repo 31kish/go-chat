@@ -10,26 +10,31 @@
         <div class="panel-body">
           <form action="{{url "Admin.Signup"}}" method="POST" role="form">
             {{with $field := field "userAdmin.Name" .}}
-              <div class="form-group">
+              <div class="form-group {{if $field.Error}}has-error{{end}}">
                   <label for="name">Name</label>
                   <input id="name" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="User Name">
-                  <span class="error">{{$field.Error}}</span>
+                  <p class="error bg-danger">{{$field.Error}}</p>
               </div>
             {{end}}
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input id="email" type="text" class="form-control" required placeholder="Email">
-            </div>
-            <div class="form-group">
+            {{with $field := field "userAdmin.MailAdress" .}}
+              <div class="form-group {{if $field.Error}}has-error{{end}}">
+                <label for="email">Email</label>
+                <input id="email" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="Email">
+                <p class="error bg-danger">{{$field.Error}}</p>
+              </div>
+            {{end}}
+            {{with $field := field "userAdmin.Password" .}}
               <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" class="form-control" rows="3" required>
+                <input id="password" type="password" name="{{$field.Name}}" value="" class="form-control" rows="3" required>
               </div>
+            {{end}}
+            {{with $field := field "verifyPassword" .}}
               <div class="form-group">
-                  <label for="password">Confirm</label>
-                  <input type="password" id="password-confirm" class="form-control" rows="3" required>
+                  <label for="verify-password">Confirm</label>
+                  <input id="verify-password" type="password" name="{{$field.Name}}" value="" class="form-control" rows="3" required>
               </div>
-            </div>
+            {{end}}
             <div class="form-group">
               <button id="signin-button" type="submit" class="btn btn-primary btn-block">SignUp</button>
             </div>
