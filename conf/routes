@@ -7,11 +7,11 @@ module:testrunner
 # module:jobs
 
 # Admin
+GET           /admin              Admin.Show
 GET           /admin/signin       Admin.Index
 POST          /admin/signin       Admin.Signin
 GET           /admin/signup       Admin.Signup
 POST          /admin/signup       Admin.Create
-GET           /admin/             Admin.Show
 DELETE        /admin/user/:id     Admin.Delete
 
 # User
