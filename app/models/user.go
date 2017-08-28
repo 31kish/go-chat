@@ -25,7 +25,11 @@ type User struct {
 
 // UserAdmin -
 type UserAdmin struct {
-	User
+	modelBase
+	MailAdress     string `gorm:"unique; size:100"`
+	Name           string `gorm:"not null; size:18"`
+	Password       string `gorm:"-"`
+	HashedPassword []byte `gorm:"not null"`
 }
 
 // Validate - UserAdmin
