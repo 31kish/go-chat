@@ -1,9 +1,13 @@
 package controllers
 
 import (
+	"encoding/json"
 	"go-chat/app/models"
 	"go-chat/app/routes"
+	"go-chat/app/services"
 	"go-chat/app/utils"
+	"log"
+	"unsafe"
 
 	"github.com/revel/revel"
 )
@@ -34,6 +38,8 @@ func (c Admin) Signin() revel.Result {
 
 // Signup - signup page
 func (c Admin) Signup() revel.Result {
+	log.Println(utils.I18n.Translate(""))
+
 	return c.Render()
 }
 
@@ -50,8 +56,22 @@ func (c Admin) Create(userAdmin models.UserAdmin, verifyPassword string) revel.R
 	}
 
 	// insert
+	// ex. service.UserAdmin{}.Save(interface)
+	s := services.UserAdmin{}
+	r, err := s.Save(userAdmin)
+	if err != nil {
+		c.Flash.Error("%s", err)
+		return c.Redirect(routes.Admin.Signup())
+	}
+
+	// serialize as string
+	serialized, _ := json.Marshal(r)
 
 	// session
+	c.Session["user_admin"] = *(*string)(unsafe.Pointer(&serialized))
+
+	log.Printf("%s", c.Session["user_admin"])
+
 	return c.Redirect(routes.Admin.Index())
 }
 
