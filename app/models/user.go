@@ -1,22 +1,13 @@
 package models
 
 import (
-	"time"
-
+	"github.com/jinzhu/gorm"
 	"github.com/revel/revel"
 )
 
-// modelBase - Base definition
-type modelBase struct {
-	ID        uint `gorm:"primary_key; AUTO_INCREMENT"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-}
-
 // User -
 type User struct {
-	modelBase
+	gorm.Model
 	MailAdress     string `gorm:"unique; size:100"`
 	Name           string `gorm:"not null; size:18"`
 	Password       string `gorm:"-"`
@@ -25,7 +16,7 @@ type User struct {
 
 // UserAdmin -
 type UserAdmin struct {
-	modelBase
+	gorm.Model
 	MailAdress     string `gorm:"unique; size:100"`
 	Name           string `gorm:"not null; size:18"`
 	Password       string `gorm:"-"`
