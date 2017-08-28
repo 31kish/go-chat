@@ -6,31 +6,29 @@ import (
 	"github.com/revel/revel"
 )
 
+// modelBase - Base definition
+type modelBase struct {
+	ID        uint `gorm:"primary_key; AUTO_INCREMENT"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
+}
+
 // User -
 type User struct {
-	ID             uint64 `gorm:"primary_key"`
-	MailAdress     string `sql:"size:255"`
-	Name           string `sql:"size:255"`
-	Password       string `sql:"-"`
-	HashedPassword []byte
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
-	DeletedAt      *time.Time
+	modelBase
+	MailAdress     string `gorm:"unique; size:100"`
+	Name           string `gorm:"not null; size:18"`
+	Password       string `gorm:"-"`
+	HashedPassword []byte `gorm:"not null"`
 }
 
 // UserAdmin -
 type UserAdmin struct {
-	ID             uint64 `gorm:"primary_key"`
-	MailAdress     string `sql:"size:255"`
-	Name           string `sql:"size:255"`
-	Password       string `sql:"-"`
-	HashedPassword []byte
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
-	DeletedAt      *time.Time
+	User
 }
 
-// Validate -
+// Validate - UserAdmin
 func (userAdmin *UserAdmin) Validate(v *revel.Validation) {
 	v.Check(
 		userAdmin.Name,
@@ -39,4 +37,5 @@ func (userAdmin *UserAdmin) Validate(v *revel.Validation) {
 	).Message("3文字以上、15文字以内で入力してください")
 
 	v.Email(userAdmin.MailAdress).Message("メールアドレスの形式で入力してください")
+	v.MaxSize(userAdmin.MailAdress, 50).Message("50文字以内で入力してください")
 }
