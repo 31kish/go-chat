@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"go-chat/app/models"
@@ -9,11 +9,11 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-// DB -
-var DB *gorm.DB
+// Connection -
+var Connection **gorm.DB
 
-// InitDB -
-func InitDB() {
+// Init -
+func Init() {
 	db, err := gorm.Open("sqlite3", "./go-chat.db")
 
 	if err != nil {
@@ -21,7 +21,7 @@ func InitDB() {
 	}
 
 	db.DB()
-	DB = db
+	Connection = &db
 
 	autoMigrate()
 
@@ -29,5 +29,10 @@ func InitDB() {
 }
 
 func autoMigrate() {
-	DB.AutoMigrate(models.UserAdmin{}, models.User{})
+	conn := *Connection
+	conn.AutoMigrate(models.UserAdmin{}, models.User{})
+}
+
+type DataServiceBase struct {
+	*gorm.DB
 }
