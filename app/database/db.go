@@ -4,6 +4,8 @@ import (
 	"go-chat/app/models"
 	"log"
 
+	"github.com/revel/revel"
+
 	"github.com/jinzhu/gorm"
 	// sqlite -
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -20,6 +22,7 @@ func Init() {
 		log.Panicf("faild to connect database %#v", err)
 	}
 
+	db.LogMode(revel.DevMode)
 	db.DB()
 	Connection = &db
 
