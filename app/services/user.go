@@ -22,7 +22,7 @@ func (s UserAdmin) Save(i models.UserAdmin) (interface{}, error) {
 	result := db.Create(&i)
 
 	if result.Error != nil {
-		log.Printf("Error %s", result.Error)
+		log.Printf("Error %#v", result.Error)
 	}
 
 	return result.Value, result.Error
@@ -30,7 +30,6 @@ func (s UserAdmin) Save(i models.UserAdmin) (interface{}, error) {
 
 func isExistsMailAdress(s string) error {
 	db := *database.Connection
-	// result := db.Where("mail_adress = ?", s).Find(&models.UserAdmin{})
 	result := db.Where(models.UserAdmin{MailAdress: s}).First(&models.UserAdmin{})
 
 	if result.Value != nil {

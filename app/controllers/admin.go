@@ -38,8 +38,6 @@ func (c Admin) Signin() revel.Result {
 
 // Signup - signup page
 func (c Admin) Signup() revel.Result {
-	log.Println(utils.I18n.Translate(""))
-
 	return c.Render()
 }
 
@@ -70,7 +68,7 @@ func (c Admin) Create(userAdmin models.UserAdmin, verifyPassword string) revel.R
 	// session
 	c.Session["user_admin"] = *(*string)(unsafe.Pointer(&serialized))
 
-	log.Printf("%s", c.Session["user_admin"])
+	log.Printf("%#v", c.Session["user_admin"])
 
 	return c.Redirect(routes.Admin.Index())
 }

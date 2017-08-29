@@ -17,7 +17,7 @@ func Init() {
 	db, err := gorm.Open("sqlite3", "./go-chat.db")
 
 	if err != nil {
-		log.Panicf("faild to connect database %v", err)
+		log.Panicf("faild to connect database %#v", err)
 	}
 
 	db.DB()
