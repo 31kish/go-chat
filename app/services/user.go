@@ -4,6 +4,7 @@ import (
 	"errors"
 	"go-chat/app/database"
 	"go-chat/app/models"
+	"go-chat/app/utils"
 	"log"
 )
 
@@ -33,7 +34,7 @@ func isExistsMailAdress(s string) error {
 	result := db.Where(models.UserAdmin{MailAdress: s}).First(&models.UserAdmin{})
 
 	if result.Value != nil {
-		return errors.New("すでに登録済みのメールアドレスです。")
+		return errors.New(utils.I18n.Translate("validation_error.is_exists_mailadress"))
 	}
 
 	return nil
