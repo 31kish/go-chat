@@ -1,13 +1,10 @@
 package controllers
 
 import (
-	"encoding/json"
 	"go-chat/app/models"
 	"go-chat/app/routes"
 	"go-chat/app/services"
 	"go-chat/app/utils"
-	"log"
-	"unsafe"
 
 	"github.com/revel/revel"
 )
@@ -22,17 +19,35 @@ func (c Admin) before() revel.Result {
 	return c.Result
 }
 
+func (c Admin) loggedIn() bool {
+	_, contains := c.Session["user_admin_id"]
+	return contains
+}
+
 func init() {
 	revel.InterceptMethod(Admin.before, revel.BEFORE)
 }
 
 // Index - signin page
 func (c Admin) Index() revel.Result {
+	if c.loggedIn() {
+		return c.Redirect(routes.Admin.Show())
+	}
+
 	return c.Render()
 }
 
 // Signin - signin action
-func (c Admin) Signin() revel.Result {
+func (c Admin) Signin(mailAdress string, password string) revel.Result {
+	s := services.UserAdmin{}
+
+	userAdmin, err := s.GetUserAdmin(mailAdress, password)
+	if err != nil {
+		c.Flash.Error("%s", err)
+	}
+
+	c.Session["user_admin_id"] = string(userAdmin.(models.UserAdmin).ID)
+	c.Session["user_admin_name"] = userAdmin.(models.UserAdmin).Name
 	return c.Redirect(routes.Admin.Show())
 }
 
@@ -62,20 +77,16 @@ func (c Admin) Create(userAdmin models.UserAdmin, verifyPassword string) revel.R
 		return c.Redirect(routes.Admin.Signup())
 	}
 
-	// serialize as string
-	serialized, _ := json.Marshal(r)
-
 	// session
-	c.Session["user_admin"] = *(*string)(unsafe.Pointer(&serialized))
-
-	log.Printf("%#v", c.Session["user_admin"])
+	c.Session["user_admin_id"] = string(r.(*models.UserAdmin).ID)
+	c.Session["user_admin_name"] = r.(*models.UserAdmin).Name
 
 	return c.Redirect(routes.Admin.Index())
 }
 
 // Show - admin top page
 func (c Admin) Show() revel.Result {
-	if _, contains := c.Session["user_admin"]; !contains {
+	if !c.loggedIn() {
 		return c.Redirect(routes.Admin.Index())
 	}
 

@@ -29,11 +29,35 @@ func (s UserAdmin) Save(i models.UserAdmin) (interface{}, error) {
 	return result.Value, result.Error
 }
 
+// GetUserAdmin - select
+func (s UserAdmin) GetUserAdmin(email string, password string) (interface{}, error) {
+	db := *database.Connection
+	u := models.UserAdmin{}
+
+	query := db.Where(&models.UserAdmin{MailAdress: email}).First(&u)
+	count := query.RowsAffected
+
+	log.Printf("vvvvvvvv %#v", u)
+	log.Printf("ccccccccc %#v", count)
+
+	if count == 0 {
+		return nil, errors.New(utils.I18n.Translate("user_admin.error.not_found"))
+	}
+
+	if !utils.ComparePassword(u.HashedPassword, password) {
+		return nil, errors.New(utils.I18n.Translate("user_admin.error.not_found"))
+	}
+
+	return u, nil
+}
+
 func isExistsMailAdress(s string) error {
 	db := *database.Connection
-	result := db.Where(models.UserAdmin{MailAdress: s}).First(&models.UserAdmin{})
+	model := models.UserAdmin{MailAdress: s}
 
-	if result.Value != nil {
+	query := db.Where(&model).First(&model)
+
+	if query.RowsAffected != 0 {
 		return errors.New(utils.I18n.Translate("validation_error.is_exists_mailadress"))
 	}
 

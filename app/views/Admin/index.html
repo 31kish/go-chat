@@ -4,20 +4,27 @@
   <h3>Administrator</h3>
   <div class="row">
     <div class="col-lg-4">
+      {{if .flash.error}}
+        <p class="bg-warning">認証に失敗しました。</p>
+      {{end}}
       <div class="panel panel-default span6">
         <div class="panel-heading">
           <h4>Signin</h4>
         </div>
         <div class="panel-body">
           <form action="{{url "Admin.Signin"}}" method="POST">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input id="email" type="text" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" class="form-control" rows="3"></input>
-            </div>
+            {{with $field := field "mailAdress" .}}
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="text" name="{{$field.Name}}" class="form-control" required>
+              </div>
+            {{end}}
+            {{with $field := field "password" .}}
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="{{$field.Name}}" value="" class="form-control" required></input>
+              </div>
+            {{end}}
             <p>
               <button id="signin-button" type="submit" class="btn btn-primary btn-block">SignIn</button>
             </p>

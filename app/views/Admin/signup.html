@@ -1,4 +1,5 @@
 {{template "header.html" .}}
+
 <div class="container">
   <h3>Administrator</h3>
   <div class="row">
@@ -39,7 +40,7 @@
             {{with $field := field "verifyPassword" .}}
               <div class="form-group">
                   <label for="verify-password">Confirm</label>
-                  <input id="verify-password" type="password" name="{{$field.Name}}" value="" class="form-control" rows="3" required>
+                  <input id="verify-password" type="password" name="{{$field.Name}}" value="" class="form-control" required>
               </div>
             {{end}}
             <div class="form-group">
