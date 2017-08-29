@@ -1,3 +1,5 @@
-message: HogeMsg
-user_admin:
-  error: ErrorMsg
+validation_error:
+  is_exists_mailadress: すでに登録済みのメールアドレスです。
+  user_name: 3文字以上、15文字以内で入力してください
+  email_format: メールアドレスの形式で入力してください
+  email_max_length: 50文字以内で入力してください
