@@ -1,0 +1,56 @@
+{{template "header.html" .}}
+
+<div class="container">
+    <h3>User</h3>
+    <div class="row">
+      <div class="col-lg-4">
+        {{if .flash.error}}
+          <p class="bg-warning">登録できませんでした。<br>{{.flash.error}}</p>
+        {{end}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="panel panel-default span6">
+          <div class="panel-heading">
+            <h4>Signup</h4>
+          </div>
+          <div class="panel-body">
+            <form action="{{url "App.Signup"}}" method="POST" role="form">
+              {{with $field := field "user.Name" .}}
+                <div class="form-group {{if $field.Error}}has-error{{end}}">
+                    <label for="name">Name</label>
+                    <input id="name" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="User Name">
+                    <p class="error bg-danger">{{$field.Error}}</p>
+                </div>
+              {{end}}
+              {{with $field := field "user.MailAdress" .}}
+                <div class="form-group {{if $field.Error}}has-error{{end}}">
+                  <label for="email">Email</label>
+                  <input id="email" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="Email">
+                  <p class="error bg-danger">{{$field.Error}}</p>
+                </div>
+              {{end}}
+              {{with $field := field "user.Password" .}}
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input id="password" type="password" name="{{$field.Name}}" value="" class="form-control" required>
+                </div>
+              {{end}}
+              {{with $field := field "verifyPassword" .}}
+                <div class="form-group">
+                    <label for="verify-password">Confirm</label>
+                    <input id="verify-password" type="password" name="{{$field.Name}}" value="" class="form-control" required>
+                </div>
+              {{end}}
+              <div class="form-group">
+                <button id="signin-button" type="submit" class="btn btn-primary btn-block">SignUp</button>
+              </div>
+            </form>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+{{template "footer.html" .}}

@@ -36,3 +36,15 @@ func (userAdmin *UserAdmin) Validate(v *revel.Validation) {
 	v.Email(userAdmin.MailAdress).Message(utils.I18n.Translate("validation_error.email_format"))
 	v.MaxSize(userAdmin.MailAdress, 50).Message(utils.I18n.Translate("validation_error.email_max_length"))
 }
+
+// Validate - User
+func (user User) Validate(v *revel.Validation) {
+	v.Check(
+		user.Name,
+		revel.MaxSize{Max: 15},
+		revel.MinSize{Min: 3},
+	).Message(utils.I18n.Translate("validation_error.user_name"))
+
+	v.Email(user.MailAdress).Message(utils.I18n.Translate("validation_error.email_format"))
+	v.MaxSize(user.MailAdress, 50).Message(utils.I18n.Translate("validation_error.email_max_length"))
+}
