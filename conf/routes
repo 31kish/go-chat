@@ -13,6 +13,7 @@ POST          /admin/signin       Admin.Signin
 GET           /admin/signup       Admin.Signup
 POST          /admin/signup       Admin.Create
 DELETE        /admin/user/:id     Admin.Delete
+GET           /admin/signout      Admin.Signout
 
 # User
 GET           /signin             App.Index
