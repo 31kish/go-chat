@@ -36,8 +36,11 @@ func (c Admin) Show() revel.Result {
 		return c.Redirect(routes.Admin.Index())
 	}
 
-	s := services.UserAdmin{}
-	userAdmins, err := s.GetAll()
+	admin := services.UserAdmin{}
+	userAdmins, err := admin.GetAll()
+
+	user := services.User{}
+	users, err := user.GetAll()
 
 	if err != nil {
 		c.Flash.Error("%s", err)
@@ -46,7 +49,7 @@ func (c Admin) Show() revel.Result {
 
 	c.ViewArgs["name"] = c.Session["user_admin_name"]
 	c.ViewArgs["id"] = c.Session["user_admin_id"]
-	return c.Render(userAdmins)
+	return c.Render(userAdmins, users)
 }
 
 // Index - signin page
@@ -65,6 +68,7 @@ func (c Admin) Signin(mailAdress string, password string) revel.Result {
 	user, err := s.Get(mailAdress, password)
 	if err != nil {
 		c.Flash.Error("%s", err)
+		return c.Redirect(routes.Admin.Index())
 	}
 
 	c.Session["user_admin_id"] = fmt.Sprint(user.ID)
