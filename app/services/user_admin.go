@@ -1,7 +1,6 @@
 package services
 
 import (
-	"errors"
 	"go-chat/app/database"
 	"go-chat/app/models"
 	"go-chat/app/utils"
@@ -10,13 +9,14 @@ import (
 
 // UserAdmin - buisiness logic
 type UserAdmin struct {
+	Base
 }
 
 // Create - Create UserAdmin
 func (s UserAdmin) Create(u models.UserAdmin) (*models.UserAdmin, error) {
 	db := *database.Connection
 
-	if err := isExistsMailAdress(u.MailAdress); err != nil {
+	if err := s.isExistsMailAdress(u.MailAdress); err != nil {
 		return nil, err
 	}
 
@@ -40,13 +40,23 @@ func (s UserAdmin) Update(id int, name string, mailadress string) error {
 		return err
 	}
 
-	err = isExistsMailAdressByID(id, mailadress)
+	err = s.isExistsMailAdressByID(id, mailadress)
 
 	if err != nil {
 		return err
 	}
 
-	result := db.Model(u).Update(models.UserAdmin{Name: name})
+	update := models.UserAdmin{}
+
+	if u.Name != name {
+		update.Name = name
+	}
+
+	if u.MailAdress != mailadress {
+		update.MailAdress = mailadress
+	}
+
+	result := db.Model(u).Update(update)
 
 	if result.Error != nil {
 		log.Printf("Error %#v", result.Error)
@@ -66,10 +76,10 @@ func (s UserAdmin) Delete(id int) error {
 		return err
 	}
 
-	query := db.Delete(&user)
+	result := db.Delete(&user)
 
-	if query.Error != nil {
-		return query.Error
+	if result.Error != nil {
+		return result.Error
 	}
 
 	return nil
@@ -84,11 +94,11 @@ func (s UserAdmin) Get(email string, password string) (*models.UserAdmin, error)
 	count := query.RowsAffected
 
 	if count == 0 {
-		return nil, notFound()
+		return nil, s.notFound()
 	}
 
 	if !utils.ComparePassword(u.HashedPassword, password) {
-		return nil, notFound()
+		return nil, s.notFound()
 	}
 
 	return &u, nil
@@ -103,7 +113,7 @@ func (s UserAdmin) GetByID(id int) (*models.UserAdmin, error) {
 	count := query.RowsAffected
 
 	if count == 0 {
-		return nil, notFound()
+		return nil, s.notFound()
 	}
 
 	return &u, nil
@@ -118,42 +128,34 @@ func (s UserAdmin) GetAll() ([]models.UserAdmin, error) {
 	count := query.RowsAffected
 
 	if count == 0 {
-		return nil, notFound()
+		return nil, s.notFound()
 	}
 
 	return u, nil
 }
 
-func isExistsMailAdress(s string) error {
+func (s UserAdmin) isExistsMailAdress(email string) error {
 	db := *database.Connection
-	model := models.UserAdmin{MailAdress: s}
+	model := models.UserAdmin{MailAdress: email}
 
 	query := db.Where(&model).First(&model)
 
 	if query.RowsAffected != 0 {
-		return existsMailAdress()
+		return s.existsMailAdress()
 	}
 
 	return nil
 }
 
-func isExistsMailAdressByID(id int, mailadress string) error {
+func (s UserAdmin) isExistsMailAdressByID(id int, email string) error {
 	db := *database.Connection
 
 	model := models.UserAdmin{}
-	query := db.Not("id", id).Where(models.UserAdmin{MailAdress: mailadress}).Find(&model)
+	query := db.Not("id", id).Where(models.UserAdmin{MailAdress: email}).Find(&model)
 
 	if query.RowsAffected != 0 {
-		return existsMailAdress()
+		return s.existsMailAdress()
 	}
 
 	return nil
-}
-
-func existsMailAdress() error {
-	return errors.New(utils.I18n.Translate("validation_error.is_exists_mailadress"))
-}
-
-func notFound() error {
-	return errors.New(utils.I18n.Translate("user_admin.error.not_found"))
 }
