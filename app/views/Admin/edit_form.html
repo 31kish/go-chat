@@ -1,0 +1,24 @@
+<div id="edit-modal">
+  <div class="panel-body">
+      <p class="error bg-warning"></p>
+        <form action="" role="form">
+          <input type="hidden" id="id">
+          {{with $field := field "name" .}}
+            <div class="form-group {{if $field.Error}}has-error{{end}}">
+                <label for="name">Name</label>
+                <input id="name" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="User Name">
+            </div>
+          {{end}}
+          {{with $field := field "mailAdress" .}}
+            <div class="form-group {{if $field.Error}}has-error{{end}}">
+              <label for="email">Email</label>
+              <input id="email" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="Email">
+            </div>
+          {{end}}
+        <div class="form-group">
+            <button type="button" class="btn btn-success btn-block save-button">Save</button>
+            <button type="button" class="btn btn-info btn-block cancel-button">Cancel</button>
+          </div>
+        </form>
+      </div>
+</div>

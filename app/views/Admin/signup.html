@@ -34,7 +34,7 @@
             {{with $field := field "userAdmin.Password" .}}
               <div class="form-group">
                 <label for="password">Password</label>
-                <input id="password" type="password" name="{{$field.Name}}" value="" class="form-control" rows="3" required>
+                <input id="password" type="password" name="{{$field.Name}}" value="" class="form-control" required>
               </div>
             {{end}}
             {{with $field := field "verifyPassword" .}}

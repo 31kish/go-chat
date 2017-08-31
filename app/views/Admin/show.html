@@ -1,4 +1,5 @@
 {{append . "moreScripts" "js/admin.js"}}
+{{append . "moreStyles" "css/admin.css"}}
 {{template "header.html" .}}
 
 <div class="container">
@@ -25,11 +26,11 @@
             <td id="id">{{.ID}}</td>
             <td id="name">{{.Name}}</td>
             <td id="email">{{.MailAdress}}</td>
-            <td>{{datetime .CreatedAt}}</td>
-            <td>{{datetime .UpdatedAt}}</td>
-            <td>{{if .DeletedAt}}{{datetime .DeltedAt}}{{end}}</td>
-            <td><button type="button" class="btn btn-success btn-block edit-button">編集</button></td>
-            <td><button type="button" class="btn btn-danger btn-block delete-button">削除</button></td>
+            <td id="creted-at">{{datetime .CreatedAt}}</td>
+            <td id="updated-at">{{datetime .UpdatedAt}}</td>
+            <td id="deleted-at">{{if .DeletedAt}}{{datetime .DeletedAt}}{{end}}</td>
+            <td>{{if not .DeletedAt}}<button type="button" class="btn btn-success btn-block edit-button">Edit</button>{{end}}</td>
+            <td>{{if not .DeletedAt}}<button type="button" class="btn btn-danger btn-block delete-button">Delete</button>{{end}}</td>
           </tr>
         {{end}}
       </tbody>
@@ -37,4 +38,5 @@
   </div>
 </div>
 
+{{template "Admin/edit_form.html" .}}
 {{template "debug.html" .}}

@@ -6,6 +6,7 @@ import (
 	"go-chat/app/routes"
 	"go-chat/app/services"
 	"go-chat/app/utils"
+	"net/http"
 
 	"github.com/revel/revel"
 )
@@ -91,7 +92,7 @@ func (c Admin) Create(userAdmin models.UserAdmin, verifyPassword string) revel.R
 	// insert
 	// ex. service.UserAdmin{}.Save(interface)
 	s := services.UserAdmin{}
-	user, err := s.Save(userAdmin)
+	user, err := s.Create(userAdmin)
 	if err != nil {
 		c.Flash.Error("%s", err)
 		return c.Redirect(routes.Admin.Signup())
@@ -105,6 +106,30 @@ func (c Admin) Create(userAdmin models.UserAdmin, verifyPassword string) revel.R
 
 // Delete - user delete action
 func (c Admin) Delete(id int) revel.Result {
+	s := services.UserAdmin{}
+	err := s.Delete(id)
+
+	if err != nil {
+		c.Response.Status = http.StatusInternalServerError
+		text := err.Error()
+		return c.RenderText(text)
+	}
+
+	return c.RenderText("success")
+}
+
+// Update - user update action
+func (c Admin) Update(id int, name string, mailAdress string) revel.Result {
+	s := services.UserAdmin{}
+
+	err := s.Update(id, name, mailAdress)
+
+	if err != nil {
+		c.Response.Status = http.StatusUnprocessableEntity
+		text := err.Error()
+		return c.RenderText(text)
+	}
+
 	return c.Render()
 }
 

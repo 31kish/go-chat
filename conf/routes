@@ -12,6 +12,7 @@ GET           /admin/signin       Admin.Index
 POST          /admin/signin       Admin.Signin
 GET           /admin/signup       Admin.Signup
 POST          /admin/signup       Admin.Create
+PUT           /admin/user/:id     Admin.Update
 DELETE        /admin/user/:id     Admin.Delete
 GET           /admin/signout      Admin.Signout
 
