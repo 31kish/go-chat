@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"go-chat/app/models"
 	"go-chat/app/routes"
 	"go-chat/app/services"
@@ -28,6 +29,25 @@ func init() {
 	revel.InterceptMethod(Admin.before, revel.BEFORE)
 }
 
+// Show - Top page
+func (c Admin) Show() revel.Result {
+	if !c.loggedIn() {
+		return c.Redirect(routes.Admin.Index())
+	}
+
+	s := services.UserAdmin{}
+	userAdmins, err := s.GetAll()
+
+	if err != nil {
+		c.Flash.Error("%s", err)
+		return c.Redirect(routes.Admin.Show())
+	}
+
+	c.ViewArgs["name"] = c.Session["user_admin_name"]
+	c.ViewArgs["id"] = c.Session["user_admin_id"]
+	return c.Render(userAdmins)
+}
+
 // Index - signin page
 func (c Admin) Index() revel.Result {
 	if c.loggedIn() {
@@ -41,13 +61,13 @@ func (c Admin) Index() revel.Result {
 func (c Admin) Signin(mailAdress string, password string) revel.Result {
 	s := services.UserAdmin{}
 
-	userAdmin, err := s.GetUserAdmin(mailAdress, password)
+	user, err := s.Get(mailAdress, password)
 	if err != nil {
 		c.Flash.Error("%s", err)
 	}
 
-	c.Session["user_admin_id"] = string(userAdmin.(models.UserAdmin).ID)
-	c.Session["user_admin_name"] = userAdmin.(models.UserAdmin).Name
+	c.Session["user_admin_id"] = fmt.Sprint(user.ID)
+	c.Session["user_admin_name"] = user.Name
 	return c.Redirect(routes.Admin.Show())
 }
 
@@ -71,29 +91,26 @@ func (c Admin) Create(userAdmin models.UserAdmin, verifyPassword string) revel.R
 	// insert
 	// ex. service.UserAdmin{}.Save(interface)
 	s := services.UserAdmin{}
-	r, err := s.Save(userAdmin)
+	user, err := s.Save(userAdmin)
 	if err != nil {
 		c.Flash.Error("%s", err)
 		return c.Redirect(routes.Admin.Signup())
 	}
 
 	// session
-	c.Session["user_admin_id"] = string(r.(*models.UserAdmin).ID)
-	c.Session["user_admin_name"] = r.(*models.UserAdmin).Name
-
+	c.Session["user_admin_id"] = fmt.Sprint(user.ID)
+	c.Session["user_admin_name"] = user.Name
 	return c.Redirect(routes.Admin.Index())
-}
-
-// Show - admin top page
-func (c Admin) Show() revel.Result {
-	if !c.loggedIn() {
-		return c.Redirect(routes.Admin.Index())
-	}
-
-	return c.Render()
 }
 
 // Delete - user delete action
 func (c Admin) Delete(id int) revel.Result {
 	return c.Render()
+}
+
+// Signout - sign out
+func (c Admin) Signout(id string) revel.Result {
+	delete(c.Session, "user_admin_id")
+	delete(c.Session, "user_admin_name")
+	return c.Redirect(routes.Admin.Index())
 }
