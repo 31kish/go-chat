@@ -7,7 +7,8 @@
     <h3>welcome {{.name}}</h3>
     <a href="admin/signout">Sign Out</a>
     <p class="hidden">{{.id}}</p>
-    <table class="table">
+    <h4>User Admins</h4>
+    <table class="table admins">
       <thead>
         <tr>
           <th>ID</th>
@@ -35,8 +36,38 @@
         {{end}}
       </tbody>
     </table>
+    <hr>
+    <h4>Users</h4>
+    <table class="table users">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>MailAdress</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>DeletedAt</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .users}}
+            <tr>
+              <td id="id">{{.ID}}</td>
+              <td id="name">{{.Name}}</td>
+              <td id="email">{{.MailAdress}}</td>
+              <td id="creted-at">{{datetime .CreatedAt}}</td>
+              <td id="updated-at">{{datetime .UpdatedAt}}</td>
+              <td id="deleted-at">{{if .DeletedAt}}{{datetime .DeletedAt}}{{end}}</td>
+              <td>{{if not .DeletedAt}}<button type="button" class="btn btn-success btn-block edit-button">Edit</button>{{end}}</td>
+              <td>{{if not .DeletedAt}}<button type="button" class="btn btn-danger btn-block delete-button">Delete</button>{{end}}</td>
+            </tr>
+          {{end}}
+        </tbody>
+      </table>
   </div>
 </div>
 
 {{template "Admin/edit_form.html" .}}
-{{template "debug.html" .}}
+{{template "footer.html" .}}

@@ -15,7 +15,17 @@ $(function() {
     modal.find('#created-at').val(created)
     modal.find('#updated-at').val(updated)
     modal.find('#deleted-at').val(deleted)
-    modal.find('form').attr('action', '/admin/user/' + id)
+
+    let path
+
+    if ($(this).parents('table').hasClass('admins')) {
+      path = '/admin/user/' + id
+    }
+    else {
+      path = '/user/' + id
+    }
+
+    modal.find('form').attr('action', path)
 
     $('body').append('<div id="modal-bg"></div>')
     modalResize()
@@ -42,6 +52,7 @@ $(function() {
   })
 
   $(document).on('click', '#edit-modal .save-button', function() {
+    $('#edit-modal .error').remove()
     let data = $('form').serializeArray()
 
     $.ajax({
