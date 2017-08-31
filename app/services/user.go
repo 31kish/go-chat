@@ -12,8 +12,8 @@ import (
 type UserAdmin struct {
 }
 
-// Save - insert
-func (s UserAdmin) Save(i models.UserAdmin) (interface{}, error) {
+// Save - Create UserAdmin
+func (s UserAdmin) Save(i models.UserAdmin) (*models.UserAdmin, error) {
 	db := *database.Connection
 
 	if err := isExistsMailAdress(i.MailAdress); err != nil {
@@ -24,27 +24,40 @@ func (s UserAdmin) Save(i models.UserAdmin) (interface{}, error) {
 
 	if result.Error != nil {
 		log.Printf("Error %#v", result.Error)
+		return nil, result.Error
 	}
 
-	return result.Value, result.Error
+	return &i, nil
 }
 
-// GetUserAdmin - select
-func (s UserAdmin) GetUserAdmin(email string, password string) (interface{}, error) {
+// Get - Find UserAdmin with Email and Password
+func (s UserAdmin) Get(email string, password string) (*models.UserAdmin, error) {
 	db := *database.Connection
 	u := models.UserAdmin{}
 
 	query := db.Where(&models.UserAdmin{MailAdress: email}).First(&u)
 	count := query.RowsAffected
 
-	log.Printf("vvvvvvvv %#v", u)
-	log.Printf("ccccccccc %#v", count)
-
 	if count == 0 {
 		return nil, errors.New(utils.I18n.Translate("user_admin.error.not_found"))
 	}
 
 	if !utils.ComparePassword(u.HashedPassword, password) {
+		return nil, errors.New(utils.I18n.Translate("user_admin.error.not_found"))
+	}
+
+	return &u, nil
+}
+
+// GetAll - Return All UserAdmins
+func (s UserAdmin) GetAll() ([]models.UserAdmin, error) {
+	db := *database.Connection
+	u := []models.UserAdmin{}
+
+	query := db.Unscoped().Find(&u)
+	count := query.RowsAffected
+
+	if count == 0 {
 		return nil, errors.New(utils.I18n.Translate("user_admin.error.not_found"))
 	}
 
