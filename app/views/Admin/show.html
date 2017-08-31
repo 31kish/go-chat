@@ -1,0 +1,40 @@
+{{append . "moreScripts" "js/admin.js"}}
+{{template "header.html" .}}
+
+<div class="container">
+  <div class="row">
+    <h3>welcome {{.name}}</h3>
+    <a href="admin/signout">Sign Out</a>
+    <p class="hidden">{{.id}}</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>MailAdress</th>
+          <th>CreatedAt</th>
+          <th>UpdatedAt</th>
+          <th>DeletedAt</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .userAdmins}}
+          <tr>
+            <td id="id">{{.ID}}</td>
+            <td id="name">{{.Name}}</td>
+            <td id="email">{{.MailAdress}}</td>
+            <td>{{datetime .CreatedAt}}</td>
+            <td>{{datetime .UpdatedAt}}</td>
+            <td>{{if .DeletedAt}}{{datetime .DeltedAt}}{{end}}</td>
+            <td><button type="button" class="btn btn-success btn-block edit-button">編集</button></td>
+            <td><button type="button" class="btn btn-danger btn-block delete-button">削除</button></td>
+          </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{template "debug.html" .}}
