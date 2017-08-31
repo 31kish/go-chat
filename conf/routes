@@ -17,13 +17,17 @@ DELETE        /admin/user/:id     Admin.Delete
 GET           /admin/signout      Admin.Signout
 
 # User
-GET           /signin             App.Index
+GET           /my                 App.Index
+GET           /signin             App.Signin
+POST          /signin             App.Auth
 GET           /signup             App.Signup
 POST          /signup             App.Create
+PUT           /user/:id           App.Update
+DELETE        /user/:id           App.Delete
+GET           /user/signout       App.Signout
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
-*       /       404
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/*filepath                       Static.Serve("public")
