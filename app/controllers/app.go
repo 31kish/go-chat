@@ -30,6 +30,14 @@ func (c App) loggedIn() bool {
 	return contains
 }
 
+func (c App) Root() revel.Result {
+	if c.loggedIn() {
+		return c.Redirect(routes.App.Index())
+	}
+
+	return c.Redirect(routes.App.Signin())
+}
+
 // Index - User top page.
 func (c App) Index() revel.Result {
 	if !c.loggedIn() {

@@ -25,7 +25,7 @@ POST          /signup             App.Create
 PUT           /user/:id           App.Update
 DELETE        /user/:id           App.Delete
 GET           /user/signout       App.Signout
-
+GET           /                   App.Root
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
