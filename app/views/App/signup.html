@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-lg-4">
         {{if .flash.error}}
-          <p class="bg-warning">登録できませんでした。<br>{{.flash.error}}</p>
+          <div class="alert alert-danger">登録できませんでした。<br>{{.flash.error}}</div>
         {{end}}
       </div>
     </div>
@@ -21,14 +21,14 @@
                 <div class="form-group {{if $field.Error}}has-error{{end}}">
                     <label for="name">Name</label>
                     <input id="name" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="User Name">
-                    <p class="error bg-danger">{{$field.Error}}</p>
+                    <div class="error alert alert-danger">{{$field.Error}}</div>
                 </div>
               {{end}}
               {{with $field := field "user.MailAdress" .}}
                 <div class="form-group {{if $field.Error}}has-error{{end}}">
                   <label for="email">Email</label>
                   <input id="email" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="Email">
-                  <p class="error bg-danger">{{$field.Error}}</p>
+                  <div class="error alert alert-danger">{{$field.Error}}</div>
                 </div>
               {{end}}
               {{with $field := field "user.Password" .}}
