@@ -26,6 +26,11 @@ PUT           /user/:id           App.Update
 DELETE        /user/:id           App.Delete
 GET           /user/signout       App.Signout
 GET           /                   App.Root
+
+# Chat
+GET           /messages                  Chat.Messages
+WS            /messages/socket           Chat.MessagesSocket
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
