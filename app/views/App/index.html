@@ -3,10 +3,9 @@
 <div class="container">
   <div class="row">
     <h3>welcome {{.name}}</h3>
-    <a href="user/signout">Sign Out</a>
-    <p class="hidden">{{.id}}</p>
+    <a href="user/signout">Sign Out</a><br>
+    <a href="/messages">Chat Room</a>
   </div>
 </div>
 
-{{template "debug.html" .}}
 {{template "footer.html" .}}

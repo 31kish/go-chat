@@ -1,4 +1,56 @@
+{{append . "moreScripts" "js/templating.js"}}
+{{append . "moreScripts" "js/chat.js"}}
 {{template "header.html" .}}
 
+<div class="container">
+  <div class="row">
+    <h1>Websocket -- You are now chatting as {{.user}}</h1>
+    <a href="/my">Leave the chat room</a>
+
+    <div id="thread">
+      <script type="text/html" id="message_tmpl">
+        {{raw "<%"}} if (event.Type == 2) { %>
+          <div class="message <% event.User == '{{.user}}' ? 'you' : '' %>">
+            <h2>{{raw "<%"}}= event.User %></h2>
+            <p>
+              {{raw "<%"}}= event.Text %>
+            </p>
+          </div>
+          {{raw "<%"}} } %>
+          {{raw "<%"}} if (event.Type == 0) { %>
+            <div class="message notice">
+              <h2></h2>
+              <p>
+                {{raw "<%"}}= event.User %> joined the room
+              </p>
+            </div>
+          {{raw "<%"}} } %>
+          {{raw "<%"}} if (event.Type == 1) { %>
+            <div class="message notice">
+              <h2></h2>
+              <p>
+                {{raw "<%"}}= event.User %> left the room
+              </p>
+            </div>
+          {{raw "<%"}} } %>
+          {{raw "<%"}} if (event.Type == 3) { %>
+            <div class="message important">
+              <h2>
+                <p>
+                  You are now disconnected!
+                </p>
+              </h2>
+            </div>
+          {{raw "<%"}} } %>
+      </script>
+    </div>
+
+    <div id="newMessage">
+      <input type="text" id="message" autocomplete="off" autofocus>
+      <input type="submit" value="send" id="send">
+    </div>
+
+  </div>
+</div>
 
 {{template "footer.html" .}}
