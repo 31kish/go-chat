@@ -7,6 +7,7 @@ import (
 	"go-chat/app/services"
 	"go-chat/app/utils"
 	"net/http"
+	"strings"
 
 	"github.com/revel/revel"
 )
@@ -39,12 +40,15 @@ func (c Admin) Show() revel.Result {
 	admin := services.UserAdmin{}
 	userAdmins, err := admin.GetAll()
 
+	if err != nil {
+		c.Flash.Data["error_user_admins"] = err.Error()
+	}
+
 	user := services.User{}
 	users, err := user.GetAll()
 
 	if err != nil {
-		c.Flash.Error("%s", err)
-		return c.Redirect(routes.Admin.Show())
+		c.Flash.Data["error_users"] = err.Error()
 	}
 
 	c.ViewArgs["name"] = c.Session["user_admin_name"]
@@ -124,8 +128,20 @@ func (c Admin) Delete(id int) revel.Result {
 
 // Update - user update action
 func (c Admin) Update(id int, name string, mailAdress string) revel.Result {
-	s := services.UserAdmin{}
+	m := models.UserAdmin{Name: name, MailAdress: mailAdress}
+	m.Validate(c.Validation)
 
+	if c.Validation.HasErrors() {
+		c.Response.Status = http.StatusUnprocessableEntity
+		var msg string
+		for _, err := range c.Validation.Errors {
+			k := strings.Split(err.Key, ".")[1]
+			msg = fmt.Sprintf("%sは%s", k, err.Message)
+		}
+		return c.RenderText(msg)
+	}
+
+	s := services.UserAdmin{}
 	err := s.Update(id, name, mailAdress)
 
 	if err != nil {
