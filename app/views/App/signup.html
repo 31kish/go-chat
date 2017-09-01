@@ -21,14 +21,14 @@
                 <div class="form-group {{if $field.Error}}has-error{{end}}">
                     <label for="name">Name</label>
                     <input id="name" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="User Name">
-                    <div class="error alert alert-danger">{{$field.Error}}</div>
+                    <p class="error text-danger">{{$field.Error}}</p>
                 </div>
               {{end}}
               {{with $field := field "user.MailAdress" .}}
                 <div class="form-group {{if $field.Error}}has-error{{end}}">
                   <label for="email">Email</label>
                   <input id="email" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="Email">
-                  <div class="error alert alert-danger">{{$field.Error}}</div>
+                  <div class="error text-danger">{{$field.Error}}</div>
                 </div>
               {{end}}
               {{with $field := field "user.Password" .}}

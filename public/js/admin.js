@@ -52,7 +52,9 @@ $(function() {
   })
 
   $(document).on('click', '#edit-modal .save-button', function() {
-    $('#edit-modal .error').remove()
+    let errorMsg = $('#edit-modal').find('p.error')
+    errorMsg.addClass('hidden')
+
     let data = $('form').serializeArray()
 
     $.ajax({
@@ -63,7 +65,8 @@ $(function() {
         location.reload()
       },
       error: function(jqXhr) {
-        $('#edit-modal .error').append(jqXhr.responseText)
+        errorMsg.removeClass('hidden')
+        errorMsg.html(jqXhr.responseText)
       }
     })
   })

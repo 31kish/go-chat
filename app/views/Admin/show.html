@@ -8,6 +8,11 @@
     <a href="admin/signout">Sign Out</a>
     <p class="hidden">{{.id}}</p>
     <h4>User Admins</h4>
+    {{if not .userAdmins}}
+    <tr>
+      <p class="alert alert-info">{{.flash.error_user_admins}}</p>
+    </tr>
+    {{else}}
     <table class="table admins">
       <thead>
         <tr>
@@ -23,21 +28,27 @@
       </thead>
       <tbody>
         {{range .userAdmins}}
-          <tr>
-            <td id="id">{{.ID}}</td>
-            <td id="name">{{.Name}}</td>
-            <td id="email">{{.MailAdress}}</td>
-            <td id="creted-at">{{datetime .CreatedAt}}</td>
-            <td id="updated-at">{{datetime .UpdatedAt}}</td>
-            <td id="deleted-at">{{if .DeletedAt}}{{datetime .DeletedAt}}{{end}}</td>
-            <td>{{if not .DeletedAt}}<button type="button" class="btn btn-success btn-block edit-button">Edit</button>{{end}}</td>
-            <td>{{if not .DeletedAt}}<button type="button" class="btn btn-danger btn-block delete-button">Delete</button>{{end}}</td>
-          </tr>
+        <tr>
+          <td id="id">{{.ID}}</td>
+          <td id="name">{{.Name}}</td>
+          <td id="email">{{.MailAdress}}</td>
+          <td id="creted-at">{{datetime .CreatedAt}}</td>
+          <td id="updated-at">{{datetime .UpdatedAt}}</td>
+          <td id="deleted-at">{{if .DeletedAt}}{{datetime .DeletedAt}}{{end}}</td>
+          <td>{{if not .DeletedAt}}<button type="button" class="btn btn-success btn-block edit-button">Edit</button>{{end}}</td>
+          <td>{{if not .DeletedAt}}<button type="button" class="btn btn-danger btn-block delete-button">Delete</button>{{end}}</td>
+        </tr>
         {{end}}
       </tbody>
     </table>
+    {{end}}
     <hr>
     <h4>Users</h4>
+    {{if not .users}}
+    <tr>
+      <p class="alert alert-info">{{.flash.error_users}}</p>
+    </tr>
+    {{else}}
     <table class="table users">
         <thead>
           <tr>
@@ -66,6 +77,7 @@
           {{end}}
         </tbody>
       </table>
+      {{end}}
   </div>
 </div>
 

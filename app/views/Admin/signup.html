@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-lg-4">
       {{if .flash.error}}
-        <div class="alert alert-danger">登録できませんでした。<br>{{.flash.error}}</div>
+        <p class="alert alert-danger">登録できませんでした。<br>{{.flash.error}}</p>
       {{end}}
     </div>
   </div>
@@ -19,16 +19,16 @@
           <form action="{{url "Admin.Signup"}}" method="POST" role="form">
             {{with $field := field "userAdmin.Name" .}}
               <div class="form-group {{if $field.Error}}has-error{{end}}">
-                  <label for="name">Name</label>
-                  <input id="name" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="User Name">
-                  <div class="error alert alert-danger">{{$field.Error}}</div>
+                <label for="name">Name</label>
+                <input id="name" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="User Name">
+                <p class="error text-danger">{{$field.Error}}</p>
               </div>
             {{end}}
             {{with $field := field "userAdmin.MailAdress" .}}
               <div class="form-group {{if $field.Error}}has-error{{end}}">
                 <label for="email">Email</label>
                 <input id="email" type="text" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" required placeholder="Email">
-                <div class="error alert alert-danger">{{$field.Error}}</div>
+                <p class="error text-danger">{{$field.Error}}</p>
               </div>
             {{end}}
             {{with $field := field "userAdmin.Password" .}}
