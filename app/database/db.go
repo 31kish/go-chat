@@ -23,19 +23,11 @@ func Init() {
 	}
 
 	db.LogMode(revel.DevMode)
+
+	db.AutoMigrate(models.UserAdmin{}, models.User{}, models.ChatEvent{})
+
 	db.DB()
 	Connection = &db
 
-	autoMigrate()
-
 	log.Println("connected to database")
-}
-
-func autoMigrate() {
-	conn := *Connection
-	conn.AutoMigrate(models.UserAdmin{}, models.User{})
-}
-
-type DataServiceBase struct {
-	*gorm.DB
 }
