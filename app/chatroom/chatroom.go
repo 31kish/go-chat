@@ -3,6 +3,8 @@ package chatroom
 import (
 	"container/list"
 	"go-chat/app/models"
+	"go-chat/app/services"
+	"log"
 )
 
 // Subscription -
@@ -13,22 +15,35 @@ type Subscription struct {
 
 // Cancel - Owner of a subscription must cancel it when they stop listening to events.
 func (s Subscription) Cancel() {
+	log.Println("Cancel()")
 	unsubscribe <- s.New // Unsubscribe the channel.
 	drain(s.New)         // Drain it, just in case there was a pending publish.
 }
 
 func newEvent(userID uint, typ int, msg string) models.ChatEvent {
-	return models.ChatEvent{UserID: userID, Type: typ, Text: msg}
+	s := services.ChatEvent{}
+	userService := services.User{}
+
+	u, _ := userService.GetByID(int(userID))
+	e, err := s.Create(models.ChatEvent{UserID: userID, UserName: u.Name, Type: typ, Text: msg})
+
+	if err != nil {
+		panic(err)
+	}
+
+	return *e
 }
 
 // Subscribe -
 func Subscribe() Subscription {
+	log.Println("Subscribe()")
 	resp := make(chan Subscription)
 	subscribe <- resp
 	return <-resp
 }
 
 func Join(userID uint) {
+	log.Println("Join")
 	publish <- newEvent(userID, models.ChatEventType.Join(), "")
 }
 
@@ -37,6 +52,7 @@ func Say(userID uint, message string) {
 }
 
 func Leave(userID uint) {
+	println("Leave")
 	publish <- newEvent(userID, models.ChatEventType.Leave(), "")
 }
 
@@ -60,6 +76,7 @@ func chatroom() {
 	for {
 		select {
 		case ch := <-subscribe:
+			log.Println("subscribe")
 			var events []models.ChatEvent
 			for e := archive.Front(); e != nil; e = e.Next() {
 				events = append(events, e.Value.(models.ChatEvent))
@@ -69,6 +86,7 @@ func chatroom() {
 			ch <- Subscription{events, subscriber}
 
 		case event := <-publish:
+			log.Println("publish")
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
 				ch.Value.(chan models.ChatEvent) <- event
 			}
@@ -80,6 +98,7 @@ func chatroom() {
 			archive.PushBack(event)
 
 		case unsub := <-unsubscribe:
+			log.Println("unsub")
 			for ch := subscribers.Front(); ch != nil; ch.Next() {
 				if ch.Value.(chan models.ChatEvent) == unsub {
 					subscribers.Remove(ch)

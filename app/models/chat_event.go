@@ -5,9 +5,11 @@ import "github.com/jinzhu/gorm"
 // ChatEvent -
 type ChatEvent struct {
 	gorm.Model
-	UserID uint
-	Type   int // "0:join", "1:leave", or "2:message"
-	Text   string
+	UserID   uint
+	UserName string
+	Type     int // "0:join", "1:leave", or "2:message"
+	Text     string
+	SendAt   string `gorm:"-"`
 }
 
 type chatEventTypeEnum int
