@@ -1,45 +1,43 @@
+{{append . "moreScripts" "js/jquery.scrollTo.min.js"}}
 {{append . "moreScripts" "js/templating.js"}}
 {{append . "moreScripts" "js/chat.js"}}
+{{append . "moreStyles" "css/messages.css"}}
 {{template "header.html" .}}
 
 <div class="container">
   <div class="row">
-    <h1>Websocket -- You are now chatting as {{.user}}</h1>
+    <h1>Websocket -- You are now chatting as {{.user_name}}</h1>
     <a href="/my">Leave the chat room</a>
 
     <div id="thread">
       <script type="text/html" id="message_tmpl">
         {{raw "<%"}} if (event.Type == 2) { %>
-          <div class="message <% event.User == '{{.user}}' ? 'you' : '' %>">
-            <h2>{{raw "<%"}}= event.User %></h2>
-            <p>
-              {{raw "<%"}}= event.Text %>
-            </p>
+          <div class="message-balloon <%= event.UserID == '{{.user_id}}' ? 'me' : 'other' %>">
+            <span class="user-name">{{raw "<%"}}= event.UserName %></span>
+            <div class="chatting">
+              <div class="says">
+                  <p>
+                    {{raw "<%"}}= event.Text %>
+                  </p>
+              </div>
+            </div>
+            <span class="send-at">{{raw "<%"}}= event.SendAt %></span>
           </div>
           {{raw "<%"}} } %>
           {{raw "<%"}} if (event.Type == 0) { %>
             <div class="message notice">
-              <h2></h2>
               <p>
-                {{raw "<%"}}= event.User %> joined the room
+                {{raw "<%"}}= event.UserName %> joined the room
               </p>
+              <span class="send-at">{{raw "<%"}}= event.SendAt %></span>
             </div>
           {{raw "<%"}} } %>
           {{raw "<%"}} if (event.Type == 1) { %>
             <div class="message notice">
-              <h2></h2>
               <p>
-                {{raw "<%"}}= event.User %> left the room
+                {{raw "<%"}}= event.UserName %> left the room
               </p>
-            </div>
-          {{raw "<%"}} } %>
-          {{raw "<%"}} if (event.Type == 3) { %>
-            <div class="message important">
-              <h2>
-                <p>
-                  You are now disconnected!
-                </p>
-              </h2>
+              <span class="send-at">{{raw "<%"}}= event.SendAt %></span>
             </div>
           {{raw "<%"}} } %>
       </script>

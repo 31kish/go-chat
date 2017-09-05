@@ -1,0 +1,87 @@
+div#thread {
+  padding: 20px 10px;
+  max-width: 450px;
+  margin: 15px 0;
+  text-align: right;
+  font-size: 14px;
+  background: #7da4cd
+}
+
+/* 相手の発言 */
+.message-balloon.other {
+  margin: 10px;
+  text-align: left
+}
+
+.message-balloon.other p {
+  display: inline-block;
+  position: relative;
+  margin: 0 10px 0 0;
+  padding: 8px;
+  max-width: 250px;
+  border-radius: 12px;
+  background: #edf1ee;
+  font-size: 15px;
+}
+
+.message-balloon.other p:after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: -19px;
+  border: 8px solid transparent;
+  border-right: 18px solid #edf1ee;
+}
+
+/* 自分の発言 */
+.message-balloon.me {
+  margin: 10px;
+}
+
+.message-balloon.me p {
+  display: inline-block;
+  position: relative;
+  margin: 0 10px 0 0;
+  padding: 8px;
+  max-width: 250px;
+  border-radius: 12px;
+  background: #30e852;
+  font-size: 15px;
+}
+
+.message-balloon.me p:after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: -19px;
+  border: 8px solid transparent;
+  border-left: 18px solid #30e852;
+}
+
+/* その他 */
+.message.notice {
+  margin: 5px 0;
+  color: #F0F0F0;
+  text-align: center
+}
+.message.notice p {
+  margin: 0;
+}
+
+/* 名前表示 */
+.message-balloon.other .user-name {
+  margin: 0 0 0 10px;
+  color: #edf1ee;
+  font-size: 10px;
+}
+
+.message-balloon.me .user-name {
+  color: #edf1ee;
+  font-size: 10px;
+}
+
+/* 時間表示 */
+.send-at {
+  font-size: 10px;
+  color: #edf1ee
+}

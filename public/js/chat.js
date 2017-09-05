@@ -10,8 +10,10 @@ $(function() {
 
   // Message received on the socket
   socket.onmessage = function(event) {
-    console.log(JSON.parse(event.data))
-    // display(JSON.parse(event.data))
+    let e = JSON.parse(event.data)
+    console.log('on message')
+    console.log(e)
+    display(e)
   }
 
   $('#send').click(function(e) {
